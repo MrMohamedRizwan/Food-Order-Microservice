@@ -28,7 +28,7 @@ const VendorSchema = new Schema({
     pincode: { type: String, required: true},
     address: { type: String},
     phone: { type: String, required: true},
-    email: { type: String, required: true},
+    email: { type: String, required: true,unique:true},
     password:{ type: String, required: true},
     salt: { type: String, required: true},
     serviceAvailable: { type: Boolean},
@@ -40,8 +40,17 @@ const VendorSchema = new Schema({
     // }],
     // lat: { type: Number},
     // lng: {type: Number}
-}
-,{
+},
+{
+    toJSON:{
+        transform(doc,ret){
+            ret.id=ret._id;
+            delete ret._id;
+            delete ret.__v;
+            delete ret.password;
+            delete ret.salt;
+        }
+    },
     timestamps: true
 });
 
