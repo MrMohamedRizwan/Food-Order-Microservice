@@ -3,7 +3,8 @@ import dotenv from 'dotenv';
 import {AdminRoutes,VandorRoutes} from './routes';
 import bodyParser from 'body-parser';
 import { connectToDB } from './config/db';
-
+import path from "path"
+import fs from "fs"
 const morgan = require("morgan");
 
 dotenv.config();
@@ -15,6 +16,13 @@ app.use(bodyParser.urlencoded({extended:true}));
 app.get('/',(req,res)=>{
     res.send('Hello World');
 });
+const imagesDir = path.join(__dirname, "../images");
+
+if (!fs.existsSync(imagesDir)) {
+	fs.mkdirSync(imagesDir, { recursive: true });
+}
+
+app.use("/images", express.static(imagesDir));
 
 app.use('/admin',AdminRoutes);
 app.use("/vandor",VandorRoutes);
